@@ -33,6 +33,7 @@ library:
   - hashable
   - containers
   - unordered-containers
+  - lens
 
 executables: 
   hframes-exe: 
@@ -51,6 +52,7 @@ executables:
     - hashable
     - containers
     - unordered-containers
+    - lens
     
 tests:
   hframes-test: 
@@ -69,3 +71,4 @@ tests:
     - hashable
     - containers
     - unordered-containers
+    - lens
