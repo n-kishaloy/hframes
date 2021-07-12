@@ -5,7 +5,7 @@
 
 module DataFrame
 ( someFunc
-, DataFrame (..), HasRecords (..), HasIndex (..), HasHeader (..)
+, DataFrame (..), HasRecords (..), HasKey (..) -- , HasIndex (..)
 
 
 ) where
@@ -14,6 +14,7 @@ module DataFrame
 import Data.Text (Text)
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as U
+import qualified Data.HashMap.Strict as H
 
 import Data.Hashable ( Hashable )
 
@@ -32,34 +33,44 @@ data DF =
   DFMText   (V.Vector (Maybe Text))     | DFText    (V.Vector Text)     |
   DFMUTC    (V.Vector (Maybe UTCTime))  | DFUTC     (V.Vector UTCTime)  |
   DFMDay    (V.Vector (Maybe Day))      | DFDay     (V.Vector Day)      |
+  DFMCat    (V.Vector (Maybe (V.Vector Text)))                          |
+  DFCat     (V.Vector (V.Vector Text))                                  |   
   DFMBool   (V.Vector (Maybe Bool))     | DFBool    (U.Vector Bool)
   deriving (Show)
 
 data DFIndex =
-  DFIdInt   (U.Vector Int)      | 
-  DFIdText  (V.Vector Text)     | 
-  DFIdDay   (V.Vector Day)      |
-  DFIdTime  (V.Vector UTCTime)
+  DFIdInt   (H.HashMap Int Int)      | 
+  DFIdText  (H.HashMap Text Int)     | 
+  DFIdDay   (H.HashMap Day Int)      |
+  DFIdTime  (H.HashMap UTCTime Int)
   deriving (Show)
 
-data DataFrame = DataFrame
-  { dataFrameRecords    ::  V.Vector DF
-  , dataFrameIndex      ::  Maybe DFIndex
-  , dataFrameHeader     ::  Maybe DFIndex
-
-  } deriving (Show) 
+data DataFrame a b = (Hashable a, Hashable b) => DataFrame
+  { dataFrameRecords    ::  H.HashMap a DF
+  , dataFrameKey        ::  Maybe (H.HashMap b Int)
+  -- , dataFrameIndex      :: H.HashMap a DFIndex
+  }  
 
 makeFields ''DataFrame
 
-toJSON :: DataFrame -> Text 
+toJSON :: DataFrame a b -> Text 
 toJSON df = undefined 
 
-fromJSON :: Text -> DataFrame 
+fromJSON :: Text -> DataFrame a b
 fromJSON sr = undefined 
 
-jsonNormalize :: Text -> V.Vector Text -> V.Vector Text -> DataFrame
+toCSV :: DataFrame a b -> Text 
+toCSV df = undefined 
+
+fromCSV :: Text -> DataFrame a b
+fromCSV sr = undefined 
+
+info :: DataFrame a b -> Text 
+info df = undefined 
+
+jsonNormalize :: Text -> V.Vector Text -> V.Vector Text -> DataFrame a b
 jsonNormalize dat recPath meta = undefined
 
-headerToText :: DataFrame -> DataFrame
+headerToText :: DataFrame a b -> DataFrame a b
 headerToText df = undefined 
 
