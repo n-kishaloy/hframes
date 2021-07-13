@@ -6,6 +6,8 @@
 module DataFrame
 ( someFunc
 , DataFrame (..), HasRecords (..), HasKey (..) -- , HasIndex (..)
+, findData, findRecord, toHashMap, fromHashMap, toJSON, fromJSON
+, toCSV, fromCSV, info, jsonNormalize, headerToText
 
 
 ) where
@@ -36,14 +38,26 @@ data DF =
   DFMCat    (V.Vector (Maybe (V.Vector Text)))                          |
   DFCat     (V.Vector (V.Vector Text))                                  |   
   DFMBool   (V.Vector (Maybe Bool))     | DFBool    (U.Vector Bool)
-  deriving (Show)
+  deriving  (Show)
+
+data RData =
+  RDataMInt     (Maybe Int)             | RDataInt     Int             |
+  RDataMDouble  (Maybe Double)          | RDataDouble  Double          |
+  RDataMText    (Maybe Text)            | RDataText    Text            |
+  RDataMUTC     (Maybe UTCTime)         | RDataUTC     UTCTime         |
+  RDataMDay     (Maybe Day)             | RDataDay     Day             |
+  RDataMCat     (Maybe (V.Vector Text)) | RDataCat     (V.Vector Text) |   
+  RDataMBool    (Maybe Bool)            | RDataBool    Bool
+  deriving      (Show)
+
+type Record a = H.HashMap a RData
 
 data DFIndex =
   DFIdInt   (H.HashMap Int Int)      | 
   DFIdText  (H.HashMap Text Int)     | 
   DFIdDay   (H.HashMap Day Int)      |
   DFIdTime  (H.HashMap UTCTime Int)
-  deriving (Show)
+  deriving  (Show)
 
 data DataFrame a b = (Hashable a, Hashable b) => DataFrame
   { dataFrameRecords    ::  H.HashMap a DF
@@ -52,6 +66,18 @@ data DataFrame a b = (Hashable a, Hashable b) => DataFrame
   }  
 
 makeFields ''DataFrame
+
+findData :: b -> a -> DataFrame a b -> RData
+findData ky fd = undefined
+
+findRecord :: b -> DataFrame a b -> Record a
+findRecord ky = undefined 
+
+toHashMap :: DataFrame a b -> H.HashMap b (Record a)
+toHashMap df = undefined 
+
+fromHashMap :: H.HashMap b (Record a) -> DataFrame a b 
+fromHashMap hs = undefined 
 
 toJSON :: DataFrame a b -> Text 
 toJSON df = undefined 
