@@ -116,6 +116,30 @@ vecToDF rd = case rd V.! 0 of
 
   _ -> Nothing
 
+dfToVec :: DF -> V.Vector RData
+dfToVec df = undefined
+
+addMaybeDF :: DF -> DF
+addMaybeDF df = undefined 
+
+removeMaybeDF :: DF -> Maybe DF 
+removeMaybeDF df = undefined
+
+unsafeRemoveMaybeDF :: DF -> DF 
+unsafeRemoveMaybeDF df = undefined
+
+addMaybeRDate :: RData -> RData
+addMaybeRDate rd = undefined 
+
+removeMaybeRData :: RData -> Maybe RData 
+removeMaybeRData rd = undefined
+
+unsafeRemoveMaybeRData :: RData -> RData 
+unsafeRemoveMaybeRData rd = undefined
+
+removeMaybeDataFrame :: V.Vector a -> DataFrame a b -> Maybe (DataFrame a b)
+removeMaybeDataFrame vc df = undefined 
+
 jsonNormalize :: Text -> V.Vector Text -> V.Vector Text -> DataFrame a b
 jsonNormalize dat recPath meta = undefined
 
