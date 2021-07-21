@@ -104,15 +104,17 @@ fromCSV sr = undefined
 info :: DataFrame a b -> Text
 info df = undefined
 
-vecMIntToDFMInt :: V.Vector RData -> Maybe DF
-vecMIntToDFMInt rd = V.mapM f rd >>= (Just . DFMInt) where
-  f (RDataMInt x) = Just x
-  f _ = Nothing
+vecToDF :: V.Vector RData -> Maybe DF
+vecToDF rd = case rd V.! 0 of
+  RDataInt _ -> V.mapM f rd >>= (Just . DFInt . U.convert) where
+    f (RDataInt x) = Just x
+    f _ = Nothing
 
-vecIntToDFInt :: V.Vector RData -> Maybe DF
-vecIntToDFInt rd = V.mapM f rd >>= (Just . DFInt . U.convert) where
-  f (RDataInt x) = Just x
-  f _ = Nothing
+  RDataMInt _ -> V.mapM f rd >>= (Just . DFMInt) where
+    f (RDataMInt x) = Just x
+    f _ = Nothing
+
+  _ -> Nothing
 
 jsonNormalize :: Text -> V.Vector Text -> V.Vector Text -> DataFrame a b
 jsonNormalize dat recPath meta = undefined
