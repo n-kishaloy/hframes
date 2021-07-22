@@ -1,11 +1,33 @@
+{-|
+Module      : hframes
+Description : Implement DataFrames in Haskell
+Copyright   : (c) 2021 Kishaloy Neogi
+License     : MIT
+Maintainer  : Kishaloy Neogi
+Email       : nkishaloy@yahoo.com
+
+
+
+You may see the github repository at <https://github.com/n-kishaloy/hframes>
+-}
+
+
 {-# LANGUAGE ExistentialQuantification, TemplateHaskell, FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies #-}
 {-# LANGUAGE Strict, OverloadedLists, OverloadedStrings #-}
 
 
 module DataFrame
-( someFunc
-, DataFrame (..), HasRecords (..), HasKey (..) -- , HasIndex (..)
+( 
+  
+  
+-- *How to use this library
+-- |Add @hframes@ to build-depends and @import DataFrames@
+
+-- |
+
+-- *Documentation
+  DataFrame (..), HasRecords (..), HasKey (..) -- , HasIndex (..)
 , getData, getRecord, toHashMap, fromHashMap, toJSON, fromJSON
 , toCSV, fromCSV, info, jsonNormalize, headerToText
 
@@ -26,10 +48,9 @@ import Control.Lens ( makeFields )
 
 import Data.Time (Day, UTCTime)
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+{-|@DF = Vector of each Datatype supported by DataFrames@
 
-
+-}
 data DF =
   DFMInt    (V.Vector (Maybe Int))      | DFInt     (U.Vector Int)      |
   DFMDouble (V.Vector (Maybe Double))   | DFDouble  (U.Vector Double)   |
@@ -128,8 +149,8 @@ removeMaybeDF df = undefined
 unsafeRemoveMaybeDF :: DF -> DF 
 unsafeRemoveMaybeDF df = undefined
 
-addMaybeRDate :: RData -> RData
-addMaybeRDate rd = undefined 
+addMaybeRData :: RData -> RData
+addMaybeRData rd = undefined 
 
 removeMaybeRData :: RData -> Maybe RData 
 removeMaybeRData rd = undefined
