@@ -27,7 +27,7 @@ module DataFrame
 -- |
 
 -- *Documentation
-  DataFrame (..), HasRecords (..), HasKey (..) -- , HasIndex (..)
+  DataFrame (..), HasRecords (..), HasKey (..), HasIndex (..) -- , HasIndex (..)
 , getData, getRecord, toHashMap, fromHashMap, toJSON, fromJSON
 , toCSV, fromCSV, info, jsonNormalize, headerToText
 
@@ -74,17 +74,17 @@ data RData =
 
 type Record a = H.HashMap a RData
 
-data DFIndex =
-  DFIdInt   (H.HashMap Int Int)      |
-  DFIdText  (H.HashMap Text Int)     |
-  DFIdDay   (H.HashMap Day Int)      |
-  DFIdTime  (H.HashMap UTCTime Int)
-  deriving  (Show)
+data DFIndex b = Hashable b =>
+  DFKeyInt    (H.HashMap Int (V.Vector b))      |
+  DFKeyText   (H.HashMap Text (V.Vector b))     |
+  DFKeyDay    (H.HashMap Day (V.Vector b))      |
+  DFKeyTime   (H.HashMap UTCTime (V.Vector b))  |
+  DFKeyBool   (H.HashMap Bool (V.Vector b))
 
 data DataFrame a b = (Hashable a, Hashable b) => DataFrame
   { dataFrameRecords    ::  H.HashMap a DF
   , dataFrameKey        ::  Maybe (H.HashMap b Int)
-  -- , dataFrameIndex      :: H.HashMap a DFIndex
+  , dataFrameIndex      ::  H.HashMap a (DFIndex b)
   }
 
 makeFields ''DataFrame
