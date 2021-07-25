@@ -27,7 +27,7 @@ module DataFrame
 -- |
 
 -- *Documentation
-  DataFrame (..), HasRecords (..), HasIndex (..) -- , HasIndex (..)
+  DataFrame (..), HasRecords (..), HasIndex (..), HasUniqueKey (..)
 , getData, getRecord, toJSON, fromJSON
 , toCSV, fromCSV, info, jsonNormalize, headerToText
 
@@ -58,8 +58,7 @@ data DFVec =
   DFMText   (V.Vector (Maybe Text))     | DFText    (V.Vector Text)     |
   DFMUTC    (V.Vector (Maybe UTCTime))  | DFUTC     (V.Vector UTCTime)  |
   DFMDay    (V.Vector (Maybe Day))      | DFDay     (V.Vector Day)      |
-  DFMCat    (V.Vector (Maybe (V.Vector Text)))                          |
-  DFCat     (V.Vector (V.Vector Text))                                  |
+  DFMCat    (V.Vector (Maybe Int))      | DFCat     (V.Vector Int)      |
   DFMBool   (V.Vector (Maybe Bool))     | DFBool    (U.Vector Bool)
   deriving  (Show)
 
@@ -69,7 +68,7 @@ data DType =
   DTypeMText    (Maybe Text)            | DTypeText    Text            |
   DTypeMUTC     (Maybe UTCTime)         | DTypeUTC     UTCTime         |
   DTypeMDay     (Maybe Day)             | DTypeDay     Day             |
-  DTypeMCat     (Maybe (V.Vector Text)) | DTypeCat     (V.Vector Text) |
+  DTypeMCat     (Maybe Int)             | DTypeCat     Int             |
   DTypeMBool    (Maybe Bool)            | DTypeBool    Bool
   deriving      (Show)
 
@@ -82,9 +81,18 @@ data DFIndex =
   DFKeyTime   (H.HashMap UTCTime (V.Vector Int))  |
   DFKeyBool   (H.HashMap Bool (V.Vector Int))
 
+data UniqueIndex = 
+  UniqueKeyInt    (H.HashMap Int Int)      |
+  UniqueKeyText   (H.HashMap Text Int)     |
+  UniqueKeyDay    (H.HashMap Day Int)      |
+  UniqueKeyTime   (H.HashMap UTCTime Int)  |
+  UniqueKeyBool   (H.HashMap Bool Int)
+
 data DataFrame a = Hashable a => DataFrame
   { dataFrameRecords    ::  H.HashMap a DFVec
   , dataFrameIndex      ::  H.HashMap a DFIndex
+  , dataFrameUniqueKey  ::  H.HashMap a UniqueIndex
+  , dataFrameCategory   ::  H.HashMap a (H.HashMap Text Int, V.Vector Text)
   }
 
 makeFields ''DataFrame
