@@ -23,7 +23,10 @@ dependencies:
 - base >= 4.7 && < 5
 
 library: 
-  exposed-modules: DataFrame
+  exposed-modules: 
+  - Data.DataFrame
+  - Data.DType
+  - Data.SpreadSheet
   source-dirs: src
   dependencies: 
   - text
@@ -34,6 +37,7 @@ library:
   - containers
   - unordered-containers
   - lens
+  - aeson
 
 executables: 
   hframes-exe: 
@@ -53,6 +57,7 @@ executables:
     - containers
     - unordered-containers
     - lens
+    - aeson
     
 tests:
   hframes-test: 
@@ -72,3 +77,4 @@ tests:
     - containers
     - unordered-containers
     - lens
+    - aeson

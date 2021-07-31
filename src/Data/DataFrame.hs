@@ -1,12 +1,12 @@
 {-|
-Module      : hframes
+Module      : Data.DataFrame
 Description : Implement DataFrames in Haskell
 Copyright   : (c) 2021 Kishaloy Neogi
 License     : MIT
 Maintainer  : Kishaloy Neogi
 Email       : nkishaloy@yahoo.com
 
-
+This module implements the Data.DataFrame module where the base Data.DataFrame and all functionalities are defined. 
 
 You may see the github repository at <https://github.com/n-kishaloy/hframes>
 -}
@@ -17,7 +17,7 @@ You may see the github repository at <https://github.com/n-kishaloy/hframes>
 {-# LANGUAGE Strict, OverloadedLists, OverloadedStrings #-}
 
 
-module DataFrame
+module Data.DataFrame
 (
 
 
@@ -49,6 +49,8 @@ import Data.Function ((&))
 
 import Data.Time (Day, UTCTime)
 
+import Data.DType
+
 {-|@DF = Vector of each Datatype supported by DataFrames@
 
 -}
@@ -59,20 +61,8 @@ data DFVec =
   DFMUTC    (V.Vector (Maybe UTCTime))  | DFUTC     (V.Vector UTCTime)  |
   DFMDay    (V.Vector (Maybe Day))      | DFDay     (V.Vector Day)      |
   DFMCat    (V.Vector (Maybe Int))      | DFCat     (V.Vector Int)      |
-  DFMBool   (V.Vector (Maybe Bool))     | DFBool    (U.Vector Bool)
-  deriving  (Show)
-
-data DType =
-  DTypeMInt     (Maybe Int)             | DTypeInt     Int             |
-  DTypeMDouble  (Maybe Double)          | DTypeDouble  Double          |
-  DTypeMText    (Maybe Text)            | DTypeText    Text            |
-  DTypeMUTC     (Maybe UTCTime)         | DTypeUTC     UTCTime         |
-  DTypeMDay     (Maybe Day)             | DTypeDay     Day             |
-  DTypeMCat     (Maybe Int)             | DTypeCat     Int             |
-  DTypeMBool    (Maybe Bool)            | DTypeBool    Bool
-  deriving      (Show)
-
-type Record a = H.HashMap a DType
+  DFMBool   (V.Vector (Maybe Bool))     | DFBool    (U.Vector Bool)     |
+  DFFunc    (DFVec -> DFVec)
 
 data DFIndex = 
   DFKeyInt    (H.HashMap Int (V.Vector Int))      |
@@ -115,6 +105,7 @@ idxDFToDType (DFMCat v) ix    = (v V.!? ix) >>= Just . DTypeMCat
 idxDFToDType (DFCat v) ix     = (v V.!? ix) >>= Just . DTypeCat
 idxDFToDType (DFMBool v) ix   = (v V.!? ix) >>= Just . DTypeMBool
 idxDFToDType (DFBool v) ix    = (v U.!? ix) >>= Just . DTypeBool
+idxDFToDType _ _ = error "Error in Selection"
 
 unsafeIdxDFToDType :: DFVec -> Int -> DType
 unsafeIdxDFToDType (DFMInt v) ix    = DTypeMInt     (V.unsafeIndex v ix) 
@@ -131,6 +122,7 @@ unsafeIdxDFToDType (DFMCat v) ix    = DTypeMCat     (V.unsafeIndex v ix)
 unsafeIdxDFToDType (DFCat v) ix     = DTypeCat      (V.unsafeIndex v ix) 
 unsafeIdxDFToDType (DFMBool v) ix   = DTypeMBool    (V.unsafeIndex v ix) 
 unsafeIdxDFToDType (DFBool v) ix    = DTypeBool     (U.unsafeIndex v ix) 
+unsafeIdxDFToDType _ _ = error "Error in Selection"
 
 -- |Get DType from key and field. In case key does not exist  
 getData :: DataFrame a -> Int -> a -> Maybe DType
@@ -186,15 +178,6 @@ removeMaybeDFVec df = undefined
 unsafeRemoveMaybeDFVec :: DFVec -> DFVec
 unsafeRemoveMaybeDFVec df = undefined
 
-addMaybeDType :: DType -> DType
-addMaybeDType rd = undefined
-
-removeMaybeDType :: DType -> Maybe DType
-removeMaybeDType rd = undefined
-
-unsafeRemoveMaybeDType :: DType -> DType
-unsafeRemoveMaybeDType rd = undefined
-
 removeMaybeDataFrame :: V.Vector a -> DataFrame a -> Maybe (DataFrame a)
 removeMaybeDataFrame vc df = undefined
 
@@ -228,11 +211,14 @@ rename n0 n1 df = undefined
 unsafeRename :: a -> a -> DataFrame a -> DataFrame a
 unsafeRename n0 n1 df = undefined
 
+-- | This function resets the Index. It has to be used post all sets of operations which entails changing the Index of the Records. 
+resetIndex :: DataFrame a -> DataFrame a 
+resetIndex df = undefined 
+
 mutate :: H.HashMap a (V.Vector a, V.Vector DType -> DType) -> DataFrame a -> DataFrame a
 mutate xf df = undefined
 
 transmute :: H.HashMap a (V.Vector a, V.Vector DType -> DType) -> DataFrame a -> DataFrame a
 transmute xf df = undefined
-
 
 

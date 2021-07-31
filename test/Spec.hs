@@ -4,8 +4,9 @@ module Spec where
 
 
 import Data.List (foldl')
-import DataFrame
-
+import qualified Data.DataFrame as Df
+import qualified Data.DType as Dt
+import qualified Data.SpreadSheet as Sp
 
 qTest :: Show a => a -> [Bool] -> IO ()
 

@@ -10,7 +10,7 @@ The library
 
 ## Installation 
 
-Add the library in build-depends and ```import DataFrame```
+Add the library in build-depends and ```import Data.DataFrame```
 
 ## Tutorial and Code Examples
 

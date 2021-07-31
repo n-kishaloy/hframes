@@ -1,6 +1,6 @@
 module Main where
 
-import DataFrame
+import Data.DataFrame
 
 main :: IO ()
-main = someFunc
+main = putStrLn "Hello"
